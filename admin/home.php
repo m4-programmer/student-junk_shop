@@ -23,7 +23,12 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Dashboard
+        Dashboard <?php if (Admin::Auth()->type == 1): ?>
+          <small>Admin</small>
+          
+      <?php else: ?>
+        <small>User</small>
+      <?php endif ?>
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -62,15 +67,8 @@
           <div class="small-box bg-aqua">
             <div class="inner">
               <?php
-                $stmt = $conn->prepare("SELECT * FROM details LEFT JOIN products ON products.id=details.product_id");
-                $stmt->execute();
-
-                $total = 0;
-                foreach($stmt as $srow){
-                  $subtotal = $srow['price']*$srow['quantity'];
-                  $total += $subtotal;
-                }
-
+               
+                $total = Product::sales();
                 echo "<h3>&#36; ".number_format_short($total, 2)."</h3>";
               ?>
               <p>Total Sales</p>
@@ -78,7 +76,7 @@
             <div class="icon">
               <i class="fa fa-shopping-cart"></i>
             </div>
-            <a href="book.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            <a href="sales.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->
@@ -90,8 +88,16 @@
                 $stmt = $conn->prepare("SELECT *, COUNT(*) AS numrows FROM products");
                 $stmt->execute();
                 $prow =  $stmt->fetch();
+                //if it is Admin display total product count
+                if (Admin::Auth()->id == 1) {
+                 $prow = Product::fetch_all_product();
+                }else{
+                  //else display total user product count
+                  $prow = Product::fetch_user_product();
+                }
+                
 
-                echo "<h3>".$prow['numrows']."</h3>";
+                echo "<h3>".count($prow)."</h3>";
               ?>
           
               <p>Number of Products</p>
@@ -103,7 +109,8 @@
           </div>
         </div>
         <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
+        <?php if (Admin::Auth()->id ==1): ?>
+          <div class="col-lg-3 col-xs-6">
           <!-- small box -->
           <div class="small-box bg-yellow">
             <div class="inner">
@@ -124,6 +131,27 @@
           </div>
         </div>
         <!-- ./col -->
+        <?php else: ?>
+          <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-yellow">
+            <div class="inner">
+              <?php
+                
+                echo "<h3>".count(Cart::fetch_cart(Admin::Auth()->id))."</h3>";
+              ?>
+             
+              <p>My Cart</p>
+            </div>
+            <div class="icon">
+              <i class="fa fa-users"></i>
+            </div>
+            <a href="cart.php?user=<?php echo Admin::Auth()->id ?>" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        <!-- ./col -->
+        <?php endif ?>
+        
         <div class="col-lg-3 col-xs-6">
           <!-- small box -->
           <div class="small-box bg-red">

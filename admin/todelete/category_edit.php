@@ -23,3 +23,12 @@
 	header('location: category.php');
 
 ?>
+/* This Section Feed's the  Ajax request in category.php under < function getRow(id) > */
+	if (isset($_GET['edit'])) {
+		if(isset($_POST['id'])){
+		$id = $_POST['id'];
+		$row = Category::fetch_category($id);
+
+		echo json_encode($row);
+	}
+	}

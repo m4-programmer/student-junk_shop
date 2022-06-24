@@ -1,4 +1,5 @@
 <?php include 'includes/session.php'; ?>
+<?php //include 'required.php' ?>
 <?php include 'includes/header.php'; ?>
 <body class="hold-transition skin-blue layout-top-nav">
 <div class="wrapper">
@@ -48,6 +49,7 @@
 		            </div>
 		            <h2>Monthly Top Sellers</h2>
 		       		<?php
+		       		
 		       			$month = date('m');
 		       			$conn = $pdo->open();
 
@@ -84,6 +86,7 @@
 						$pdo->close();
 
 		       		?> 
+		       		<?php //User::$auth_email; ?>
 		       		<h2>Hot Items</h2>
 		       		<?php 
 
@@ -92,7 +95,7 @@
 
 		       			try{
 		       			 	$inc = 3;	
-						    $stmt = $conn->prepare("SELECT * FROM products ");
+						    $stmt = $conn->prepare("SELECT * FROM products");
 						    $stmt->execute();
 						    foreach ($stmt as $row) {
 						    	$image = (!empty($row['photo'])) ? 'images/'.$row['photo'] : 'images/noimage.jpg';

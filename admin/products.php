@@ -1,9 +1,10 @@
 <?php include 'includes/session.php'; ?>
 <?php
-  $where = '';
+  
+  $category = '';
   if(isset($_GET['category'])){
     $catid = $_GET['category'];
-    $where = 'WHERE category_id ='.$catid;
+    $category = $catid;
   }
 
 ?>
@@ -16,6 +17,8 @@
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
+    
+
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
@@ -64,25 +67,22 @@
                     <select class="form-control input-sm" id="select_category">
                       <option value="0">ALL</option>
                       <?php
-                        $conn = $pdo->open();
-
-                        $stmt = $conn->prepare("SELECT * FROM category");
-                        $stmt->execute();
-
-                        foreach($stmt as $crow){
-                          $selected = ($crow['id'] == $catid) ? 'selected' : ''; 
+                        
+                        $mycategory = Category::fetch_category();
+                        foreach($mycategory as $crow){
+                          $selected = ($crow->id == $catid) ? 'selected' : ''; 
                           echo "
-                            <option value='".$crow['id']."' ".$selected.">".$crow['name']."</option>
+                            <option value='".$crow->id."' ".$selected.">".$crow->name."</option>
                           ";
                         }
 
-                        $pdo->close();
-                      ?>
+                       ?>
                     </select>
                   </div>
                 </form>
               </div>
             </div>
+
             <div class="box-body">
               <table id="example1" class="table table-bordered">
                 <thead>
@@ -94,29 +94,31 @@
                   <th>Tools</th>
                 </thead>
                 <tbody>
+                  <?php if (Admin::Auth()->type == 1): ?>
+                    
+                  
                   <?php
-                    $conn = $pdo->open();
+                    // $conn = $pdo->open();
 
                     try{
                       $now = date('Y-m-d');
-                      $stmt = $conn->prepare("SELECT * FROM products $where");
-                      $stmt->execute();
+                      $stmt = Product::fetch_all_product($category);
                       foreach($stmt as $row){
-                        $image = (!empty($row['photo'])) ? '../images/'.$row['photo'] : '../images/noimage.jpg';
-                        $counter = ($row['date_view'] == $now) ? $row['counter'] : 0;
+                         $image = (!empty($row->photo)) ? '../images/'.$row->photo : '../images/noimage.jpg';
+                        $counter = ($row->date_view == $now) ? $row->counter : 0;
                         echo "
                           <tr>
-                            <td>".$row['name']."</td>
+                            <td>".$row->name."</td>
                             <td>
                               <img src='".$image."' height='30px' width='30px'>
-                              <span class='pull-right'><a href='#edit_photo' class='photo' data-toggle='modal' data-id='".$row['id']."'><i class='fa fa-edit'></i></a></span>
+                              <span class='pull-right'><a href='#edit_photo' class='photo' data-toggle='modal' data-id='".$row->id."'><i class='fa fa-edit'></i></a></span>
                             </td>
-                            <td><a href='#description' data-toggle='modal' class='btn btn-info btn-sm btn-flat desc' data-id='".$row['id']."'><i class='fa fa-search'></i> View</a></td>
-                            <td>&#36; ".number_format($row['price'], 2)."</td>
+                            <td><a href='#description' data-toggle='modal' class='btn btn-info btn-sm btn-flat desc' data-id='".$row->id."'><i class='fa fa-search'></i> View</a></td>
+                            <td>&#36; ".number_format($row->price, 2)."</td>
                             <td>".$counter."</td>
                             <td>
-                              <button class='btn btn-success btn-sm edit btn-flat' data-id='".$row['id']."'><i class='fa fa-edit'></i> Edit</button>
-                              <button class='btn btn-danger btn-sm delete btn-flat' data-id='".$row['id']."'><i class='fa fa-trash'></i> Delete</button>
+                              <button class='btn btn-success btn-sm edit btn-flat' data-id='".$row->id."'><i class='fa fa-edit'></i> Edit</button>
+                              <button class='btn btn-danger btn-sm delete btn-flat' data-id='".$row->id."'><i class='fa fa-trash'></i> Delete</button>
                             </td>
                           </tr>
                         ";
@@ -128,6 +130,33 @@
 
                     $pdo->close();
                   ?>
+                  <?php else: ?>
+                    <?php 
+                  
+                    $myproduct = Product::fetch_user_product($category);
+                    $now = date('Y-m-d');
+
+                     ?>
+                     <?php foreach ($myproduct as $data):
+                      $image = (!empty($data->photo)) ? '../images/'.$data->photo : '../images/noimage.jpg';
+                      $counter = ($data->date_view == $now) ? $data->counter : 0;
+                      ?>
+                       <tr>
+                            <td><?php echo $data->name ?></td>
+                            <td>
+                              <img src='<?php echo $image ?>' height='30px' width='30px'>
+                              <span class='pull-right'><a href='#edit_photo' class='photo' data-toggle='modal' data-id='<?php echo $data->id ?>'><i class='fa fa-edit'></i></a></span>
+                            </td>
+                            <td><a href='#description' data-toggle='modal' class='btn btn-info btn-sm btn-flat desc' data-id='<?php echo $data->id ?>'><i class='fa fa-search'></i> View</a></td>
+                            <td>&#36 <?php echo number_format($data->price, 2)?></td>
+                            <td><?php echo $counter ?></td>
+                            <td>
+                              <button class='btn btn-success btn-sm edit btn-flat' data-id='<?php echo $data->id ?>'><i class='fa fa-edit'></i> Edit</button>
+                              <button class='btn btn-danger btn-sm delete btn-flat' data-id='<?php echo $data->id ?>'><i class='fa fa-trash'></i> Delete</button>
+                            </td>
+                          </tr>
+                     <?php endforeach ?>
+                  <?php endif ?>
                 </tbody>
               </table>
             </div>
@@ -201,11 +230,12 @@ $(function(){
 function getRow(id){
   $.ajax({
     type: 'POST',
-    url: 'products_row.php',
+    url: 'ajax_handlers/products_row.php',
     data: {id:id},
     dataType: 'json',
     success: function(response){
       $('#desc').html(response.description);
+      $('#poster').html('<b>Posted by:</b> '+response.firstname+' ' + response.lastname);
       $('.name').html(response.prodname);
       $('.prodid').val(response.prodid);
       $('#edit_name').val(response.prodname);
@@ -219,7 +249,7 @@ function getRow(id){
 function getCategory(){
   $.ajax({
     type: 'POST',
-    url: 'category_fetch.php',
+    url: 'ajax_handlers/category_fetch.php?fetch',
     dataType: 'json',
     success:function(response){
       $('#category').append(response);

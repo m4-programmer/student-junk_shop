@@ -1,11 +1,17 @@
-<?php include 'includes/session.php'; ?>
+<?php //include 'includes/session.php';
+  include 'required.php';
+ ?>
 <?php
+
   if(isset($_SESSION['user'])){
     header('location: cart_view.php');
   }
-  echo '<pre>';
-  print_r($_SESSION);
-  echo '</pre>';
+  if (isset($_SESSION['admin'])) {
+    header('location: admin/');
+  }
+  // echo '<pre>';
+  // print_r($_SESSION);
+  // echo '</pre>';
 ?>
 <?php include 'includes/header.php'; ?>
 <body class="hold-transition login-page">
@@ -30,10 +36,11 @@
     ?>
   	<div class="login-box-body">
     	<p class="login-box-msg">Sign in to start your session</p>
-
-    	<form action="verify.php" method="POST">
+     
+      <!-- verify -->
+    	<form action="auth/login.php" method="POST">
       		<div class="form-group has-feedback">
-        		<input type="email" class="form-control" name="email" placeholder="Email" required>
+        		<input type="email" class="form-control" value="<?php echo @$_SESSION['email']; ?>" name="email" placeholder="Email" required>
         		<span class="glyphicon glyphicon-envelope form-control-feedback"></span>
       		</div>
           <div class="form-group has-feedback">
@@ -47,7 +54,7 @@
       		</div>
     	</form>
       <br>
-      <a href="password_forgot.php">I forgot my password</a><br>
+      
       <a href="signup.php" class="text-center">Register a new membership</a><br>
       <a href="index.php"><i class="fa fa-home"></i> Home</a>
   	</div>

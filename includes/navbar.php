@@ -2,7 +2,7 @@
   <nav class="navbar navbar-static-top">
     <div class="container">
       <div class="navbar-header">
-        <a href="https://www.youtube.com/channel/UCsFgC9ggwrmYR2XqEHXpbNg" class="navbar-brand"><b>Junk</b>Shop</a>
+        <a href="./" class="navbar-brand"><b>Junk</b>Shop</a>
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
           <i class="fa fa-bars"></i>
         </button>
@@ -18,22 +18,16 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">CATEGORY <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
               <?php
-             
-                $conn = $pdo->open();
-                try{
-                  $stmt = $conn->prepare("SELECT * FROM category");
-                  $stmt->execute();
+                 
+                $stmt = Category::fetch_category();
+              
                   foreach($stmt as $row){
                     echo "
-                      <li><a href='category.php?category=".$row['cat_slug']."'>".$row['name']."</a></li>
+                      <li><a href='category.php?category=".$row->cat_slug."'>".$row->name."</a></li>
                     ";                  
                   }
-                }
-                catch(PDOException $e){
-                  echo "There is some problem in connection: " . $e->getMessage();
-                }
-
-                $pdo->close();
+               
+                
 
               ?>
             </ul>
@@ -68,8 +62,8 @@
             </ul>
           </li>
           <?php
-            if(isset($_SESSION['user'])){
-              $image = (!empty($user['photo'])) ? 'images/'.$user['photo'] : 'images/profile.jpg';
+            if(isset($_SESSION['user']) or isset($_SESSION['admin']) ){
+              $image = (!empty($user['photo'])) ? 'images/users/'.$user['photo'] : 'images/users/profile.jpg';
               echo '
                 <li class="dropdown user user-menu">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -91,7 +85,7 @@
                         <a href="profile.php" class="btn btn-default btn-flat">Profile</a>
                       </div>
                       <div class="pull-lef">
-                        <a href="profile.php" class="btn btn-default btn-flat">Dashboard</a>
+                        <a href="admin/" class="btn btn-default btn-flat">Dashboard</a>
                       </div>
                       <div class="pull-right">
                         <a href="logout.php" class="btn btn-default btn-flat">Sign out</a>

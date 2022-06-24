@@ -7,15 +7,13 @@
 	  		<ul id="trending">
 	  		<?php
 	  			$now = date('Y-m-d');
-	  			$conn = $pdo->open();
-
-	  			$stmt = $conn->prepare("SELECT * FROM products WHERE date_view=:now ORDER BY counter DESC LIMIT 10");
-	  			$stmt->execute(['now'=>$now]);
+	  			
+	  			$stmt = Product::fetch_most_n_product($now,10);
 	  			foreach($stmt as $row){
-	  				echo "<li><a href='product.php?product=".$row['slug']."'>".$row['name']."</a></li>";
+	  				echo "<li><a href='product.php?product=".$row->slug."'>".$row->name."</a></li>";
 	  			}
 
-	  			$pdo->close();
+	  			
 	  		?>
 	    	<ul>
 	  	</div>

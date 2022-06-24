@@ -72,12 +72,12 @@ $(function(){
 				if(!response.error){
 					getDetails();
 					getCart();
-					getTotal();
+					// getTotal();
 				}
 			}
 		});
 	});
-
+	// This event handles the minus button in cart_view.php
 	$(document).on('click', '.minus', function(e){
 		e.preventDefault();
 		var id = $(this).data('id');
@@ -103,7 +103,7 @@ $(function(){
 			}
 		});
 	});
-
+	// This event handles the plus button in cart_view.php
 	$(document).on('click', '.add', function(e){
 		e.preventDefault();
 		var id = $(this).data('id');
@@ -129,7 +129,7 @@ $(function(){
 	});
 
 	getDetails();
-	getTotal();
+	// getTotal();
 
 });
 
@@ -140,21 +140,21 @@ function getDetails(){
 		dataType: 'json',
 		success: function(response){
 			$('#tbody').html(response);
-			getCart();
+			//getCart();
 		}
 	});
 }
 
-function getTotal(){
-	$.ajax({
-		type: 'POST',
-		url: 'cart_total.php',
-		dataType: 'json',
-		success:function(response){
-			total = response;
-		}
-	});
-}
+// function getTotal(){
+// 	$.ajax({
+// 		type: 'POST',
+// 		url: 'cart_total.php',
+// 		dataType: 'json',
+// 		success:function(response){
+// 			total = response;
+// 		}
+// 	});
+// }
 </script>
 <!-- Paypal Express -->
 <script>

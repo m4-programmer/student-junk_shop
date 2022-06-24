@@ -39,7 +39,7 @@
 	        		<div class="box box-solid">
 	        			<div class="box-body">
 	        				<div class="col-sm-3">
-	        					<img src="<?php echo (!empty($user['photo'])) ? 'images/'.$user['photo'] : 'images/profile.jpg'; ?>" width="100%">
+	        					<img src="<?php echo (!empty($user['photo'])) ? 'images/users/'.$user['photo'] : 'images/users/profile.jpg'; ?>" width="100%">
 	        				</div>
 	        				<div class="col-sm-9">
 	        					<div class="row">

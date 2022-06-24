@@ -9,6 +9,10 @@
             </div>
             <div class="modal-body">
                 <p id="desc"></p>
+                <?php if (Admin::Auth()->type == 1): ?>
+                <p id="poster"></p>
+                 <?php endif ?>
+                  
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default btn-flat pull-left" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
@@ -27,7 +31,7 @@
               <h4 class="modal-title"><b>Add New Product</b></h4>
             </div>
             <div class="modal-body">
-              <form class="form-horizontal" method="POST" action="products_add.php" enctype="multipart/form-data">
+              <form class="form-horizontal" method="POST" action="handlers/product_handlers.php?add" enctype="multipart/form-data">
                 <div class="form-group">
                   <label for="name" class="col-sm-1 control-label">Name</label>
 
@@ -83,7 +87,7 @@
               <h4 class="modal-title"><b><span class="name"></span></b></h4>
             </div>
             <div class="modal-body">
-              <form class="form-horizontal" method="POST" action="products_photo.php" enctype="multipart/form-data">
+              <form class="form-horizontal" method="POST" action="handlers/product_handlers.php?upload" enctype="multipart/form-data">
                 <input type="hidden" class="prodid" name="id">
                 <div class="form-group">
                     <label for="photo" class="col-sm-3 control-label">Photo</label>

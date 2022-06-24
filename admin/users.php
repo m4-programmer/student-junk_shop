@@ -40,6 +40,7 @@
               ".$_SESSION['success']."
             </div>
           ";
+
           unset($_SESSION['success']);
         }
       ?>
@@ -61,42 +62,46 @@
                 </thead>
                 <tbody>
                   <?php
-                    $conn = $pdo->open();
+                    // $conn = $pdo->open();
 
-                    try{
-                      $stmt = $conn->prepare("SELECT * FROM users WHERE type=:type");
-                      $stmt->execute(['type'=>0]);
+                    // try{
+                    //   $stmt = $conn->prepare("SELECT * FROM users WHERE type=:type");
+                    //   $stmt->execute(['type'=>0]);
+
+                      $stmt = Admin::fetchAllUsers();
+                      
                       foreach($stmt as $row){
-                        $image = (!empty($row['photo'])) ? '../images/'.$row['photo'] : '../images/profile.jpg';
-                        $status = ($row['status']) ? '<span class="label label-success">active</span>' : '<span class="label label-danger">not verified</span>';
-                        $active = (!$row['status']) ? '<span class="pull-right"><a href="#activate" class="status" data-toggle="modal" data-id="'.$row['id'].'"><i class="fa fa-check-square-o"></i></a></span>' : '';
+                        $image = (!empty($row->photo)) ? '../images/users/'.$row->photo : '../images/users/profile.jpg';
+                        $status = ($row->status) ? '<span class="label label-success">active</span>' : '<span class="label label-danger">not verified</span>';
+                        $active = (!$row->status) ? '<span class="pull-right"><a href="#activate" class="status" data-toggle="modal" data-id="'.$row->id.'"><i class="fa fa-check-square-o"></i></a></span>' : '';
                         echo "
                           <tr>
                             <td>
                               <img src='".$image."' height='30px' width='30px'>
-                              <span class='pull-right'><a href='#edit_photo' class='photo' data-toggle='modal' data-id='".$row['id']."'><i class='fa fa-edit'></i></a></span>
+                              <span class='pull-right'><a href='#edit_photo' class='photo' data-toggle='modal' data-id='".$row->id."'><i class='fa fa-edit'></i></a></span>
                             </td>
-                            <td>".$row['email']."</td>
-                            <td>".$row['firstname'].' '.$row['lastname']."</td>
+                            <td>".$row->email."</td>
+                            <td>".$row->firstname.' '.$row->lastname."</td>
                             <td>
                               ".$status."
                               ".$active."
                             </td>
-                            <td>".date('M d, Y', strtotime($row['created_on']))."</td>
+                            <td>".date('M d, Y', strtotime($row->created_on))."</td>
+                            
                             <td>
-                              <a href='cart.php?user=".$row['id']."' class='btn btn-info btn-sm btn-flat'><i class='fa fa-search'></i> Cart</a>
-                              <button class='btn btn-success btn-sm edit btn-flat' data-id='".$row['id']."'><i class='fa fa-edit'></i> Edit</button>
-                              <button class='btn btn-danger btn-sm delete btn-flat' data-id='".$row['id']."'><i class='fa fa-trash'></i> Delete</button>
+                              <a href='cart.php?user=".$row->id."' class='btn btn-info btn-sm btn-flat'><i class='fa fa-search'></i> Cart</a>
+                              <button class='btn btn-success btn-sm edit btn-flat' data-id='".$row->id."'><i class='fa fa-edit'></i> Edit</button>";
+                              if ($row->id != Admin::Auth()->id) {
+                                // code...
+                              
+                              echo "
+                              <button class='btn btn-danger btn-sm delete btn-flat' data-id='".$row->id."'><i class='fa fa-trash'></i> Delete</button>";
+                              }
+                              echo "
                             </td>
                           </tr>
                         ";
-                      }
                     }
-                    catch(PDOException $e){
-                      echo $e->getMessage();
-                    }
-
-                    $pdo->close();
                   ?>
                 </tbody>
               </table>
@@ -148,7 +153,7 @@ $(function(){
 function getRow(id){
   $.ajax({
     type: 'POST',
-    url: 'users_row.php',
+    url: 'ajax_handlers/users_row.php',
     data: {id:id},
     dataType: 'json',
     success: function(response){

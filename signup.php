@@ -3,14 +3,8 @@
   if(isset($_SESSION['user'])){
     header('location: cart_view.php');
   }
-print_r($_SESSION);
-  if(isset($_SESSION['captcha'])){
-    $now = time();
-    if($now >= $_SESSION['captcha']){
-      unset($_SESSION['captcha']);
-    }
-  }
-
+//print_r($_SESSION);
+  
 ?>
 <?php include 'includes/header.php'; ?>
 <body class="hold-transition register-page">
@@ -37,7 +31,7 @@ print_r($_SESSION);
   	<div class="register-box-body">
     	<p class="login-box-msg">Register a new membership</p>
 
-    	<form action="register.php" method="POST">
+    	<form action="auth/register.php" method="POST">
           <div class="form-group has-feedback">
             <input type="text" class="form-control" name="firstname" placeholder="Firstname" value="<?php echo (isset($_SESSION['firstname'])) ? $_SESSION['firstname'] : '' ?>" required>
             <span class="glyphicon glyphicon-user form-control-feedback"></span>
@@ -58,15 +52,25 @@ print_r($_SESSION);
             <input type="password" class="form-control" name="repassword" placeholder="Retype password" required>
             <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
           </div>
-          <?php
-            if(!isset($_SESSION['captcha'])){
-              echo '
-                <di class="form-group" style="width:100%;">
-                  <div class="g-recaptcha" data-sitekey="6LevO1IUAAAAAFX5PpmtEoCxwae-I8cCQrbhTfM6"></div>
-                </di>
-              ';
-            }
-          ?>
+           <div class="form-group has-feedback">
+            <select class="form-control" name="location" placeholder="Retype password" required>
+            <span class="glyphicon glyphicon-log-in form-control-feedback"></span> 
+              <option >Select Location</option>
+              <option name='odim'>odim</option>
+              <option name='odenigwe'>odenigwe</option>
+              <option name='hilltop'>hilltop</option>
+              <option name='behind flat'>behind flat</option>
+              <option name='green house'>green house</option>
+              <option name='others'>others</option>
+            </select>
+            
+            
+          </div>
+           <div class="form-group has-feedback">
+            <input type="text" class="form-control" name="phone" placeholder="Enter Phone Number" required>
+            <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
+          </div>
+          
           <hr>
       		<div class="row">
     			<div class="col-xs-4">

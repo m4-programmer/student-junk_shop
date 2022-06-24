@@ -1,9 +1,8 @@
 <?php
-	include 'includes/session.php';
+	include '../includes/session.php';
 
 	if(isset($_GET['return'])){
 		$return = $_GET['return'];
-		
 	}
 	else{
 		$return = 'home.php';
@@ -16,9 +15,11 @@
 		$firstname = $_POST['firstname'];
 		$lastname = $_POST['lastname'];
 		$photo = $_FILES['photo']['name'];
-		if(password_verify($curr_password, $admin['password'])){
+		$address = $_POST['address'];
+		$contact = $_POST['contact'];
+		if($admin['password'] == md5($curr_password)){
 			if(!empty($photo)){
-				move_uploaded_file($_FILES['photo']['tmp_name'], '../images/'.$photo);
+				move_uploaded_file($_FILES['photo']['tmp_name'], '../images/users/'.$photo);
 				$filename = $photo;	
 			}
 			else{
@@ -29,23 +30,11 @@
 				$password = $admin['password'];
 			}
 			else{
-				$password = password_hash($password, PASSWORD_DEFAULT);
+				$password = md5($password);
 			}
 
-			$conn = $pdo->open();
-
-			try{
-				$stmt = $conn->prepare("UPDATE users SET email=:email, password=:password, firstname=:firstname, lastname=:lastname, photo=:photo WHERE id=:id");
-				$stmt->execute(['email'=>$email, 'password'=>$password, 'firstname'=>$firstname, 'lastname'=>$lastname, 'photo'=>$filename, 'id'=>$admin['id']]);
-
+			Admin::update($email,$firstname,$lastname,$password,$admin['id'],$filename,$address,$contact);
 				$_SESSION['success'] = 'Account updated successfully';
-			}
-			catch(PDOException $e){
-				$_SESSION['error'] = $e->getMessage();
-			}
-
-			$pdo->close();
-			
 		}
 		else{
 			$_SESSION['error'] = 'Incorrect password';
@@ -55,6 +44,6 @@
 		$_SESSION['error'] = 'Fill up required details first';
 	}
 
-	header('location:'.$return);
+	header('location:'.Url_Admin.$return);
 
 ?>

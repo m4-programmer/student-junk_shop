@@ -42,7 +42,9 @@
             </div>
           ";
           unset($_SESSION['success']);
+
         }
+
       ?>
       <div class="row">
         <div class="col-xs-12">
@@ -58,28 +60,24 @@
                 </thead>
                 <tbody>
                   <?php
-                    $conn = $pdo->open();
+                    
+                      $cat = Category::fetch_category();
 
-                    try{
-                      $stmt = $conn->prepare("SELECT * FROM category");
-                      $stmt->execute();
-                      foreach($stmt as $row){
-                        echo "
-                          <tr>
-                            <td>".$row['name']."</td>
-                            <td>
-                              <button class='btn btn-success btn-sm edit btn-flat' data-id='".$row['id']."'><i class='fa fa-edit'></i> Edit</button>
-                              <button class='btn btn-danger btn-sm delete btn-flat' data-id='".$row['id']."'><i class='fa fa-trash'></i> Delete</button>
-                            </td>
-                          </tr>
-                        ";
+                      if (count($cat) > 0) {
+                      
+                        foreach($cat as $row){
+                          echo "
+                            <tr>
+                              <td>".$row->name."</td>
+                              <td>
+                                <button class='btn btn-success btn-sm edit btn-flat' data-id='".$row->id."'><i class='fa fa-edit'></i> Edit</button>
+                                <button class='btn btn-danger btn-sm delete btn-flat' data-id='".$row->id."'><i class='fa fa-trash'></i> Delete</button>
+                              </td>
+                            </tr>
+                          ";
+                        }
                       }
-                    }
-                    catch(PDOException $e){
-                      echo $e->getMessage();
-                    }
-
-                    $pdo->close();
+                   
                   ?>
                 </tbody>
               </table>
@@ -87,6 +85,7 @@
           </div>
         </div>
       </div>
+  
     </section>
      
   </div>
@@ -118,7 +117,7 @@ $(function(){
 function getRow(id){
   $.ajax({
     type: 'POST',
-    url: 'category_row.php',
+    url: 'handlers/category_handler.php?edit',
     data: {id:id},
     dataType: 'json',
     success: function(response){

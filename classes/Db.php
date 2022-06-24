@@ -39,7 +39,7 @@ class Db
 		
 		$this->stmt = $this->dbh->prepare($query);
 	}
-
+	
 	public function bind($params,$value, $type=null)
 	{
 		if (is_null($type)) {
@@ -69,12 +69,27 @@ class Db
 		$this->execute();
 		return $this->stmt->fetchAll(PDO::FETCH_ASSOC);
 	}
+	public function fetchsingle(){
+		/*Returns a Single Array*/
+		$this->execute();
+		return $this->stmt->fetch(PDO::FETCH_ASSOC);
+	}
+	public function fetchobj(){
+		/*Returns a Single Object*/
+		$this->execute();
+		return $this->stmt->fetch(PDO::FETCH_OBJ);
+	}
+	public function fetchobjAll(){
+		$this->execute();
+		return $this->stmt->fetchAll(PDO::FETCH_OBJ);
+	}
 	public function lastinsertid(){
 		return $this->dbh->lastInsertId();
 	}
 	public function checkdata(){
 		return $this->stmt->rowCount();
 	}
+	
 	
 	public static function check_input($data) {
 		$data = trim($data);
@@ -83,7 +98,7 @@ class Db
 		return $data;
 	}
 	// always use this method when fetching anything from your database
-	public  function fetch($table=null, $columns=null,  $whereClause=null, $whereValue=null, $orderBy=null, $limit=null, $groupBy=null){
+	public  function fetch($table=null, $columns=null,  $whereClause=null, $whereValue=null, $orderBy=null, $limit=null, $groupBy=null, $obj = null){
 		if($limit == ""){
 			$limit = ""; 
 		} else {
@@ -161,8 +176,13 @@ class Db
 				//$query = $con->prepare("SELECT * FROM $table  $groupBy $orderBy  $limit");
 			}
 		}
+		if ($obj == true) {
+		$query = $this->fetchobjAll(); 
+		return $query; 
+		}else{
 		$query = $this->fetchresult(); 
 		return $query; 
+		}
 	}
 
 

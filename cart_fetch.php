@@ -55,7 +55,7 @@
 							</div>
 							<h4>
 		                        <b>".$product['catname']."</b>
-		                        <small>&times; ".$row['quantity']."</small>
+		                        <small>&times; ".$row['quantity']."fsd</small>
 		                    </h4>
 		                    <p>".$product['prodname']."</p>
 						</a>

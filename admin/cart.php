@@ -5,13 +5,7 @@
     exit();
   }
   else{
-    $conn = $pdo->open();
-
-    $stmt = $conn->prepare("SELECT * FROM users WHERE id=:id");
-    $stmt->execute(['id'=>$_GET['user']]);
-    $user = $stmt->fetch();
-
-    $pdo->close();
+    $user = User::get('users',$_GET['user']);
   }
 
 ?>
@@ -64,41 +58,37 @@
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header with-border">
-              <a href="#addnew" data-toggle="modal" id="add" data-id="<?php echo $user['id']; ?>" class="btn btn-primary btn-sm btn-flat"><i class="fa fa-plus"></i> New</a>
-              <a href="users.php" class="btn btn-sm btn-primary btn-flat"><i class="fa fa-arrow-left"></i> Users</a>
+              <a href="<?php echo Url ?>"  class="btn btn-primary btn-sm btn-flat"><i class="fa fa-plus"></i> Shop More</a>
+              
             </div>
             <div class="box-body">
               <table id="example1" class="table table-bordered">
                 <thead>
                   <th>Product Name</th>
                   <th>Quantity</th>
+                  <th>Bought</th>
+                  <th>Date Viewed</th>
                   <th>Tools</th>
                 </thead>
                 <tbody>
                   <?php
-                    $conn = $pdo->open();
-
-                    try{
-                      $stmt = $conn->prepare("SELECT *, cart.id AS cartid FROM cart LEFT JOIN products ON products.id=cart.product_id WHERE user_id=:user_id");
-                      $stmt->execute(['user_id'=>$user['id']]);
-                      foreach($stmt as $row){
+                   
+                    $stmt = Cart::fetch_cart($user['id']);
+                    foreach($stmt as $row){
                         echo "
                           <tr>
                             <td>".$row['name']."</td>
                             <td>".$row['quantity']."</td>
+                            <td><b>".strtoupper($row['sold'])."<b></td>
+                            <td><b>".$row['date_viewed']."<b></td>
                             <td>
-                              <button class='btn btn-success btn-sm edit btn-flat' data-id='".$row['cartid']."'><i class='fa fa-edit'></i> Edit Quantity</button>
+                              
                               <button class='btn btn-danger btn-sm delete btn-flat' data-id='".$row['cartid']."'><i class='fa fa-trash'></i> Delete</button>
                             </td>
                           </tr>
                         ";
                       }
-                    }
-                    catch(PDOException $e){
-                      echo $e->getMessage();
-                    }
-
-                    $pdo->close();
+                    
                   ?>
                 </tbody>
               </table>
@@ -144,22 +134,11 @@ $(function(){
 
 });
 
-function getProducts(id){
-  $.ajax({
-    type: 'POST',
-    url: 'products_all.php',
-    dataType: 'json',
-    success: function(response){
-      $('#product').append(response);
-      $('.userid').val(id);
-    }
-  });
-}
 
 function getRow(id){
   $.ajax({
     type: 'POST',
-    url: 'cart_row.php',
+    url: 'ajax_handlers/cart_fetch.php',
     data: {id:id},
     dataType: 'json',
     success: function(response){

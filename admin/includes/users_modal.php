@@ -8,7 +8,7 @@
               <h4 class="modal-title"><b>Add New User</b></h4>
             </div>
             <div class="modal-body">
-              <form class="form-horizontal" method="POST" action="users_add.php" enctype="multipart/form-data">
+              <form class="form-horizontal" method="POST" action="handlers/users_handler.php?add" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="email" class="col-sm-3 control-label">Email</label>
 
@@ -78,7 +78,7 @@
               <h4 class="modal-title"><b>Edit User</b></h4>
             </div>
             <div class="modal-body">
-              <form class="form-horizontal" method="POST" action="users_edit.php">
+              <form class="form-horizontal" method="POST" action="handlers/users_handler.php?edit">
                 <input type="hidden" class="userid" name="id">
                 <div class="form-group">
                     <label for="edit_email" class="col-sm-3 control-label">Email</label>
@@ -142,7 +142,7 @@
               <h4 class="modal-title"><b>Deleting...</b></h4>
             </div>
             <div class="modal-body">
-              <form class="form-horizontal" method="POST" action="users_delete.php">
+              <form class="form-horizontal" method="POST" action="handlers/users_handler.php?delete">
                 <input type="hidden" class="userid" name="id">
                 <div class="text-center">
                     <p>DELETE USER</p>
@@ -168,7 +168,7 @@
               <h4 class="modal-title"><b><span class="fullname"></span></b></h4>
             </div>
             <div class="modal-body">
-              <form class="form-horizontal" method="POST" action="users_photo.php" enctype="multipart/form-data">
+              <form class="form-horizontal" method="POST" action="handlers/users_handler.php?update_photo" enctype="multipart/form-data">
                 <input type="hidden" class="userid" name="id">
                 <div class="form-group">
                     <label for="photo" class="col-sm-3 control-label">Photo</label>
@@ -187,7 +187,7 @@
     </div>
 </div> 
 
-
+<!-- To delete the items below -->
 <!-- Activate -->
 <div class="modal fade" id="activate">
     <div class="modal-dialog">

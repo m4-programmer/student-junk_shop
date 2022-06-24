@@ -8,7 +8,7 @@
             	<h4 class="modal-title"><b>Admin Profile</b></h4>
           	</div>
           	<div class="modal-body">
-            	<form class="form-horizontal" method="POST" action="profile_update.php?return=<?php echo basename($_SERVER['PHP_SELF']); ?>" enctype="multipart/form-data">
+            	<form class="form-horizontal" method="POST" action="handlers/profile_update_handler.php?return=<?php echo basename($_SERVER['PHP_SELF']); ?>" enctype="multipart/form-data">
           		  <div class="form-group">
                   	<label for="email" class="col-sm-3 control-label">Email</label>
 
@@ -36,6 +36,20 @@
                   	<div class="col-sm-9">
                     	<input type="text" class="form-control" id="lastname" name="lastname" value="<?php echo $admin['lastname']; ?>">
                   	</div>
+                </div>
+                <div class="form-group">
+                    <label for="address" class="col-sm-3 control-label">Address</label>
+
+                    <div class="col-sm-9">
+                      <textarea class="form-control" id="address" name="address" ><?php echo $admin['address']; ?></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="contact" class="col-sm-3 control-label">Contact Info</label>
+
+                    <div class="col-sm-9">
+                      <input type="text" class="form-control" id="contact" name="contact" value="<?php echo $admin['contact_info']; ?>">
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="photo" class="col-sm-3 control-label">Photo:</label>

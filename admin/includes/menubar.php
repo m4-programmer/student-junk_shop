@@ -4,7 +4,7 @@
     <!-- Sidebar user panel -->
     <div class="user-panel">
       <div class="pull-left image">
-        <img src="<?php echo (!empty($admin['photo'])) ? '../images/'.$admin['photo'] : '../images/profile.jpg'; ?>" class="img-circle" alt="User Image">
+        <img src="<?php echo (!empty($admin['photo'])) ? '../images/users/'.$admin['photo'] : '../images/users/profile.jpg'; ?>" class="img-circle" alt="User Image">
       </div>
       <div class="pull-left info">
         <p><?php echo $admin['firstname'].' '.$admin['lastname']; ?></p>
@@ -16,9 +16,14 @@
       <li class="header">REPORTS</li>
       <li><a href="home.php"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
       <li><a href="sales.php"><i class="fa fa-money"></i> <span>Sales</span></a></li>
+      <?php if (Admin::Auth()->type != 1): ?>
+        <li><a href="cart.php?user=<?php echo Admin::Auth()->id ?>"><i class="fa fa-money"></i> <span>My Cart</span></a></li>
+      <?php endif ?>
+      <?php if (Admin::Auth()->type == 1): ?>
       <li class="header">MANAGE</li>
       <li><a href="users.php"><i class="fa fa-users"></i> <span>Users</span></a></li>
-      <li class="treeview">
+      
+        <li class="treeview">
         <a href="#">
           <i class="fa fa-barcode"></i>
           <span>Products</span>
@@ -31,6 +36,11 @@
           <li><a href="category.php"><i class="fa fa-circle-o"></i> Category</a></li>
         </ul>
       </li>
+      <?php else: ?>
+      <li><a href="products.php"><i class="fa fa-shopping-cart"></i>Add My Product For Sale</a></li>
+      
+      <?php endif ?>
+      
     </ul>
   </section>
   <!-- /.sidebar -->
