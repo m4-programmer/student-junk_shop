@@ -14,7 +14,7 @@
 	    <div class="container">
 
 	      <!-- Main content -->
-	      <section class="content">
+	      <section class="content" style="margin-top:50px; width: 100%;">
 	        <div class="row">
 	        	<div class="col-sm-9">
 	        		<?php
@@ -49,6 +49,8 @@
 	        							<h4>Contact Info:</h4>
 	        							<h4>Address:</h4>
 	        							<h4>Member Since:</h4>
+	        							<h4>Whatsapp Adress:</h4>
+	        							<h4>My Product:</h4>
 	        						</div>
 	        						<div class="col-sm-9">
 	        							<h4><?php echo $user['firstname'].' '.$user['lastname']; ?>
@@ -60,61 +62,15 @@
 	        							<h4><?php echo (!empty($user['contact_info'])) ? $user['contact_info'] : 'N/a'; ?></h4>
 	        							<h4><?php echo (!empty($user['address'])) ? $user['address'] : 'N/a'; ?></h4>
 	        							<h4><?php echo date('M d, Y', strtotime($user['created_on'])); ?></h4>
+	        							<h4>Visit  <a href="admin/" target="_blank">Dashboard</a></h4>
+	        							<h4><a href="<?php echo $user['whatsapp']; ?>" target="_blank"><?php echo $user['whatsapp']; ?></a></h4>
+	        							<h4><?php echo (Product::Count_User_Product(Admin::Auth()->id)); ?></h4>
 	        						</div>
 	        					</div>
 	        				</div>
 	        			</div>
 	        		</div>
-	        		<div class="box box-solid">
-	        			<div class="box-header with-border">
-	        				<h4 class="box-title"><i class="fa fa-calendar"></i> <b>Transaction History</b></h4>
-	        			</div>
-	        			<div class="box-body">
-	        				<table class="table table-bordered" id="example1">
-	        					<thead>
-	        						<th class="hidden"></th>
-	        						<th>Date</th>
-	        						<th>Transaction#</th>
-	        						<th>Amount</th>
-	        						<th>Full Details</th>
-	        					</thead>
-	        					<tbody>
-	        					<?php
-	        						$conn = $pdo->open();
-
-	        						try{
-	        							$stmt = $conn->prepare("SELECT * FROM sales WHERE user_id=:user_id ORDER BY sales_date DESC");
-	        							$stmt->execute(['user_id'=>$user['id']]);
-	        							foreach($stmt as $row){
-	        								$stmt2 = $conn->prepare("SELECT * FROM details LEFT JOIN products ON products.id=details.product_id WHERE sales_id=:id");
-	        								$stmt2->execute(['id'=>$row['id']]);
-	        								$total = 0;
-	        								foreach($stmt2 as $row2){
-	        									$subtotal = $row2['price']*$row2['quantity'];
-	        									$total += $subtotal;
-	        								}
-	        								echo "
-	        									<tr>
-	        										<td class='hidden'></td>
-	        										<td>".date('M d, Y', strtotime($row['sales_date']))."</td>
-	        										<td>".$row['pay_id']."</td>
-	        										<td>&#36; ".number_format($total, 2)."</td>
-	        										<td><button class='btn btn-sm btn-flat btn-info transact' data-id='".$row['id']."'><i class='fa fa-search'></i> View</button></td>
-	        									</tr>
-	        								";
-	        							}
-
-	        						}
-        							catch(PDOException $e){
-										echo "There is some problem in connection: " . $e->getMessage();
-									}
-
-	        						$pdo->close();
-	        					?>
-	        					</tbody>
-	        				</table>
-	        			</div>
-	        		</div>
+	        		
 	        	</div>
 	        	<div class="col-sm-3">
 	        		<?php include 'includes/sidebar.php'; ?>

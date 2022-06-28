@@ -1,7 +1,7 @@
 <?php
 	include 'includes/session.php';
 
-	$conn = $pdo->open();
+	
 
 	if(isset($_POST['edit'])){
 		$curr_password = $_POST['curr_password'];
@@ -12,6 +12,7 @@
 		$photo = $_FILES['photo']['name'];
 		$address = $_POST['address'];
 		$contact = $_POST['contact'];
+		$whatsapp = $_POST['whatsapp'];
 		if($user['password'] == md5($curr_password)){
 			if(!empty($photo)){
 				move_uploaded_file($_FILES['photo']['tmp_name'], 'images/users/'.$photo);
@@ -28,7 +29,7 @@
 				$password = md5($password);
 			}
 
-			Admin::update($email,$firstname,$lastname,$password,$user['id'],$filename,$address,$contact);
+			Admin::update($email,$firstname,$lastname,$password,$user['id'],$filename,$address,$contact,$whatsapp);
 				$_SESSION['success'] = 'Account updated successfully';
 		}
 		else{

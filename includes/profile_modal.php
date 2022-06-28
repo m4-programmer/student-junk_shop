@@ -74,6 +74,13 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label for="email" class="col-sm-3 control-label">Whatsapp Address</label>
+
+                    <div class="col-sm-9">
+                      <input type="text" class="form-control" id="whatsapp" name="whatsapp" value="<?php echo $user['whatsapp']; ?>">
+                    </div>
+                </div>
+                <div class="form-group">
                     <label for="contact" class="col-sm-3 control-label">Contact Info</label>
 
                     <div class="col-sm-9">

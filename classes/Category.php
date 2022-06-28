@@ -19,6 +19,15 @@ class Category
 		
 		
 	}
+	public static function fetch_by_slug($slug)
+	{
+		$db = new DB;
+		$db->query("SELECT * from category where cat_slug =:slug");
+		$db->bind(':slug',$slug);
+		return $db->fetchsingle();
+			
+	}
+
 	// it returns true or false depending if the category name has been taken or not
 	public static function is_unique($name){
 		$db = new Db;

@@ -1,3 +1,4 @@
+
 <?php 
 
 /**
@@ -7,6 +8,7 @@
  */
 class User extends Db
 {
+	
 	public $db; 
 	public $name;
 	public $email;
@@ -17,6 +19,7 @@ class User extends Db
 		 $this->db = parent::__construct();
 		  
 	} 
+	
 	/* Registration Method*/
 	public function register($email,$password,$fname,$lname,$address,$phone,$time,$image=null){
 		// register users
@@ -59,10 +62,10 @@ class User extends Db
 		return $db->fetchresult();
 	}
 
-	public static function update_profile($email,$fname,$lname,$pword,$userid,$pics,$address,$phone){
+	public static function update_profile($email,$fname,$lname,$pword,$userid,$pics,$address,$phone,$whatsapp){
 		$db = new DB;
 		
-			$db->query("UPDATE users set email=:email,firstname=:fname,lastname=:lname, password=:pword,photo =:pics, address=:address, contact_info=:phone where id=:id");
+			$db->query("UPDATE users set email=:email,firstname=:fname,lastname=:lname, password=:pword,photo =:pics, address=:address, contact_info=:phone, whatsapp = :whatsapp where id=:id");
 		
 		$db->bind(':email', $email);
 		$db->bind(':fname', $fname);
@@ -73,6 +76,7 @@ class User extends Db
 
 		$db->bind(':address', $address);
 		$db->bind(':phone', $phone);
+		$db->bind(':whatsapp', $whatsapp);
 		$db->execute();
 		return true;
 	}
@@ -84,6 +88,18 @@ class User extends Db
 		}else{
 			return false;//if false then email has not been taken
 		}
+	}
+	// Update my_product column in db for a unique user
+	public static function update_my_product($my_product_total,$the_seller){
+		$db = new DB;
+		
+		$db->query("UPDATE users set my_product=:my_product_total where id=:the_seller");
+		
+		$db->bind(':my_product_total', $my_product_total);
+		$db->bind(':the_seller', $the_seller);
+		
+		$db->execute();
+		return true;
 	}
 	
 }

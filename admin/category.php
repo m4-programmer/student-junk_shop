@@ -55,26 +55,36 @@
             <div class="box-body">
               <table id="example1" class="table table-bordered">
                 <thead>
+                  <th width="10%">S/N</th>
                   <th>Category Name</th>
-                  <th>Tools</th>
+                  <?php if (Admin::Auth()->id == 1): ?>
+                    <th>Tools</th>
+                  <?php endif ?>
+                  
                 </thead>
                 <tbody>
                   <?php
                     
                       $cat = Category::fetch_category();
-
+                      $no = 1;
                       if (count($cat) > 0) {
                       
                         foreach($cat as $row){
                           echo "
                             <tr>
-                              <td>".$row->name."</td>
-                              <td>
+                              <td>".$no++."</td> 
+                              <td><b>".$row->name."</b></td> ";
+                              if (Admin::Auth()->id == 1) {
+                                echo "
+                                  <td>
                                 <button class='btn btn-success btn-sm edit btn-flat' data-id='".$row->id."'><i class='fa fa-edit'></i> Edit</button>
                                 <button class='btn btn-danger btn-sm delete btn-flat' data-id='".$row->id."'><i class='fa fa-trash'></i> Delete</button>
                               </td>
-                            </tr>
-                          ";
+                                ";
+                              }
+                              echo "</tr>";
+                            
+                         
                         }
                       }
                    

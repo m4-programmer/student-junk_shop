@@ -2,19 +2,9 @@
 <?php
 	$slug = $_GET['category'];
 
-	$conn = $pdo->open();
-
-	try{
-		$stmt = $conn->prepare("SELECT * FROM category WHERE cat_slug = :slug");
-		$stmt->execute(['slug' => $slug]);
-		$cat = $stmt->fetch();
-		$catid = $cat['id'];
-	}
-	catch(PDOException $e){
-		echo "There is some problem in connection: " . $e->getMessage();
-	}
-
-	$pdo->close();
+	$cat = Category::fetch_by_slug($slug);
+	$catid = $cat['id'];
+	
 
 ?>
 <?php include 'includes/header.php'; ?>
@@ -23,55 +13,52 @@
 
 	<?php include 'includes/navbar.php'; ?>
 	 
-	  <div class="content-wrapper">
-	    <div class="container">
+	  <div class="content-wrapper" style="margin-top:50px;">
+	    <div class="container-fluid">
 
 	      <!-- Main content -->
 	      <section class="content">
 	        <div class="row">
-	        	<div class="col-sm-9">
-		            <h1 class="page-header"><?php echo $cat['name']; ?></h1>
+	        	<div class="col-sm-12">
+		            <h1 class="page-header"><?php echo $cat['name']; ?>:  <span style="float:right">Total result: <b> <?php echo count(Product::fetch_product_by_category($catid)); ?></b></span></h1>
+		            
 		       		<?php
+		       			$stmt = Product::fetch_product_by_category($catid);
+		       			if (count($stmt) == 0) {
+		       				echo '<p class="text-danger">There is no product at the moment</p>';
+		       			}
 		       			
-		       			$conn = $pdo->open();
-
-		       			try{
-		       			 	$inc = 3;	
-						    $stmt = $conn->prepare("SELECT * FROM products WHERE category_id = :catid");
-						    $stmt->execute(['catid' => $catid]);
-						    foreach ($stmt as $row) {
-						    	$image = (!empty($row['photo'])) ? 'images/'.$row['photo'] : 'images/noimage.jpg';
-						    	$inc = ($inc == 3) ? 1 : $inc + 1;
-	       						if($inc == 1) echo "<div class='row'>";
-	       						echo "
-	       							<div class='col-sm-4'>
-	       								<div class='box box-solid'>
-		       								<div class='box-body prod-body'>
-		       									<img src='".$image."' width='100%' height='230px' class='thumbnail'>
-		       									<h5><a href='product.php?product=".$row['slug']."'>".$row['name']."</a></h5>
-		       								</div>
-		       								<div class='box-footer'>
-		       									<b>&#36; ".number_format($row['price'], 2)."</b>
-		       								</div>
-	       								</div>
-	       							</div>
-	       						";
-	       						if($inc == 3) echo "</div>";
-						    }
-						    if($inc == 1) echo "<div class='col-sm-4'></div><div class='col-sm-4'></div></div>"; 
-							if($inc == 2) echo "<div class='col-sm-4'></div></div>";
-						}
-						catch(PDOException $e){
-							echo "There is some problem in connection: " . $e->getMessage();
-						}
-
-						$pdo->close();
-
+						    	
+	       						
 		       		?> 
+		       		
+		       			<div class='row'>
+	       						<?php foreach ($stmt as $row): ?>
+		       			<?php 	$image = (!empty($row['product_image'])) ? Product_Img_Path.$row['product_image'] : Product_NoImg_Path; ?>
+							<div class='col-sm-3'>
+								<div class='box box-solid'>
+   								<div class='box-body prod-body'>
+   									<img src='<?php echo $image ?>' width='100%' height='230px' class='thumbnail'>
+       									<h5><a href='product.php?product=<?php echo $row['slug']?>'>
+       										<?php echo 	$row['name'] ?>
+       									</a></h5>
+       								</div>
+       								<div class='box-footer'>
+       									<b>&#8358; <?php echo number_format($row['price'], 2)	 ?></b>
+       									<p style='float:right;'>
+								
+										<i class='fa fa-map-marker'> </i> <b><?php echo $row['address'] ?></b>
+										 Nsukka
+									
+									
+										</p>
+       								</div>
+   								</div>
+   							</div>
+		       			
+		       		<?php endforeach ?>
 	        	</div>
-	        	<div class="col-sm-3">
-	        		<?php include 'includes/sidebar.php'; ?>
-	        	</div>
+	        	
 	        </div>
 	      </section>
 	     

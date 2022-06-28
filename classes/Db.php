@@ -8,7 +8,7 @@ class Db
 {
 	private $dbhost = "localhost";
 	private $dbuser = "root";
-	private $dbname = "ecomm";
+	private $dbname = "junk_shop";
 	private $dbpword = "";
 
 	private $error;

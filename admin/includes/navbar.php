@@ -21,7 +21,7 @@
             <img src="<?php echo (!empty($admin['photo'])) ? '../images/users/'.$admin['photo'] : '../images/users/profile.jpg'; ?>" class="user-image" alt="User Image">
             <span class="hidden-xs"><?php echo $admin['firstname'].' '.$admin['lastname']; ?></span>
           </a>
-          <ul class="dropdown-menu">
+          <ul class="dropdown-menu" style="margin-top:5px">
             <!-- User image -->
             <li class="user-header">
               <img src="<?php echo (!empty($admin['photo'])) ? '../images/users/'.$admin['photo'] : '../images/users/profile.jpg'; ?>" class="img-circle" alt="User Image">

@@ -98,13 +98,11 @@
                     
                   
                   <?php
-                    // $conn = $pdo->open();
-
-                    try{
+                   
                       $now = date('Y-m-d');
                       $stmt = Product::fetch_all_product($category);
                       foreach($stmt as $row){
-                         $image = (!empty($row->photo)) ? '../images/'.$row->photo : '../images/noimage.jpg';
+                         $image = (!empty($row->photo)) ? '../images/products/'.$row->photo : '../images/noimage.jpg';
                         $counter = ($row->date_view == $now) ? $row->counter : 0;
                         echo "
                           <tr>
@@ -114,7 +112,7 @@
                               <span class='pull-right'><a href='#edit_photo' class='photo' data-toggle='modal' data-id='".$row->id."'><i class='fa fa-edit'></i></a></span>
                             </td>
                             <td><a href='#description' data-toggle='modal' class='btn btn-info btn-sm btn-flat desc' data-id='".$row->id."'><i class='fa fa-search'></i> View</a></td>
-                            <td>&#36; ".number_format($row->price, 2)."</td>
+                            <td>&#8358; ".number_format($row->price, 2)."</td>
                             <td>".$counter."</td>
                             <td>
                               <button class='btn btn-success btn-sm edit btn-flat' data-id='".$row->id."'><i class='fa fa-edit'></i> Edit</button>
@@ -123,12 +121,7 @@
                           </tr>
                         ";
                       }
-                    }
-                    catch(PDOException $e){
-                      echo $e->getMessage();
-                    }
-
-                    $pdo->close();
+                 
                   ?>
                   <?php else: ?>
                     <?php 
@@ -138,7 +131,7 @@
 
                      ?>
                      <?php foreach ($myproduct as $data):
-                      $image = (!empty($data->photo)) ? '../images/'.$data->photo : '../images/noimage.jpg';
+                      $image = (!empty($data->photo)) ? '../images/products/'.$data->photo : '../images/noimage.jpg';
                       $counter = ($data->date_view == $now) ? $data->counter : 0;
                       ?>
                        <tr>
@@ -148,7 +141,7 @@
                               <span class='pull-right'><a href='#edit_photo' class='photo' data-toggle='modal' data-id='<?php echo $data->id ?>'><i class='fa fa-edit'></i></a></span>
                             </td>
                             <td><a href='#description' data-toggle='modal' class='btn btn-info btn-sm btn-flat desc' data-id='<?php echo $data->id ?>'><i class='fa fa-search'></i> View</a></td>
-                            <td>&#36 <?php echo number_format($data->price, 2)?></td>
+                            <td>&#8358; <?php echo number_format($data->price, 2)?></td>
                             <td><?php echo $counter ?></td>
                             <td>
                               <button class='btn btn-success btn-sm edit btn-flat' data-id='<?php echo $data->id ?>'><i class='fa fa-edit'></i> Edit</button>

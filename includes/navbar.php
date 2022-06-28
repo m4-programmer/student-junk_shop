@@ -1,8 +1,8 @@
-<header class="main-header">
-  <nav class="navbar navbar-static-top">
+<header class="main-header" style="position: fixed;width: 100%;">
+  <nav class="navbar navbar-static-top" style="background-color: <?php echo NAVBAR_COLOR; ?>">
     <div class="container">
       <div class="navbar-header">
-        <a href="./" class="navbar-brand"><b>Junk</b>Shop</a>
+        <a href="./" class="navbar-brand"><?php echo NAVBAR_BRAND ?></a>
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
           <i class="fa fa-bars"></i>
         </button>
@@ -25,6 +25,9 @@
                     echo "
                       <li><a href='category.php?category=".$row->cat_slug."'>".$row->name."</a></li>
                     ";                  
+                  }
+                  if (count($stmt) < 1) {
+                    echo "No Category is Available at the moment";
                   }
                
                 
@@ -68,7 +71,7 @@
                 <li class="dropdown user user-menu">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     <img src="'.$image.'" class="user-image" alt="User Image">
-                    <span class="hidden-xs">'.$user['firstname'].' '.$user['lastname'].'</span><span class="caret"></span>
+                    <span class="hidden-xs">'.@$user['firstname'].' '.@$user['lastname'].'</span><span class="caret"></span>
                   </a>
                   <ul class="dropdown-menu">
                     <!-- User image -->
@@ -76,17 +79,24 @@
                       <img src="'.$image.'" class="img-circle" alt="User Image">
 
                       <p>
-                        '.$user['firstname'].' '.$user['lastname'].'
-                        <small>Member since '.date('M. Y', strtotime($user['created_on'])).'</small>
+                        '.@$user['firstname'].' '.@$user['lastname'].'
+                        <small>Member since '.date('M. Y', strtotime(@$user['created_on'])).'</small>
                       </p>
-                    </li>
-                    <li class="user-footer">
+                    </li>';
+                  echo '<li class="user-footer">';
+                  if (Admin::Auth()->id == 1) {
+                    echo '<div class="pull-left">
+                        <a href="admin/" class="btn btn-default btn-flat">Dashboard</a>
+                      </div>';
+                  }else{
+                    echo '
                       <div class="pull-left">
                         <a href="profile.php" class="btn btn-default btn-flat">Profile</a>
-                      </div>
-                      <div class="pull-lef">
-                        <a href="admin/" class="btn btn-default btn-flat">Dashboard</a>
-                      </div>
+                      </div>';
+                      }
+
+                      echo '
+                      
                       <div class="pull-right">
                         <a href="logout.php" class="btn btn-default btn-flat">Sign out</a>
                       </div>

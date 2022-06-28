@@ -32,12 +32,29 @@ class Product extends Db {
         }
 		return $total;
 	}
+	/*Fetches product that falls under a particular category*/
+	public static function fetch_product_by_category($catid)
+	{
+		$db = new DB;
+		$db->query("SELECT *, products.name AS prodname, products.photo as product_image ,category.name AS catname, products.id AS prodid FROM products LEFT JOIN category ON category.id=products.category_id left JOIN users on products.seller_id = users.id where category_id = :catid order by Rand() ");
+		$db->bind(':catid',$catid);
+		return $db->fetchresult();
+	}
+	// Count's how many product a user has
+	public static function Count_User_Product($id)
+	{
+		$db = new DB;
+		$db->query("SELECT count(*) as total FROM products  WHERE seller_id=:id");
+		$db->bind(':id',$id);
+		$row = $db->fetchsingle();
+		return $row['total'];
+	}
 	//fetches the product that matches a particular category and the user details that posted the product
-	public static function Product_Category_User($id)
+	public static function Product_Category_User($productid)
 	{
 		$db = new DB;
 		$db->query("SELECT *, products.id AS prodid, products.name AS prodname, category.name AS catname FROM products LEFT JOIN category ON category.id=products.category_id LEFT JOIN users on products.seller_id = users.id  WHERE products.id=:id");
-		$db->bind(':id',$id);
+		$db->bind(':id',$productid);
 		return $db->fetchsingle();
 	}
 	//this method tells us if a product name has been taken by looking the slug
@@ -61,6 +78,27 @@ class Product extends Db {
 		}else{
 			return $db->fetch('products','','  category_id = ?',$category,'','','', true);
 		}	
+	}
+	public static function fetch_all_product_with_user_details($slug='')
+	{
+		$db = new DB;
+		if ($slug == '') {
+			$db->query("SELECT *, products.name AS prodname, products.photo as product_image ,category.name AS catname, products.id AS prodid FROM products LEFT JOIN category ON category.id=products.category_id left JOIN users on products.seller_id = users.id order by Rand()");
+		}else{
+			$db->query("SELECT *, products.name AS prodname, products.photo as product_image ,category.name AS catname, products.id AS prodid FROM products LEFT JOIN category ON category.id=products.category_id left JOIN users on products.seller_id = users.id WHERE slug = :slug ");
+			$db->bind(':slug',$slug);
+			return $db->fetchobj();
+		}
+		
+
+			return $db->fetchobjAll();
+	}
+	public static function FetchProductRandomly($slug='')
+	{
+		$db = new DB;
+		$db->query('SELECT *, products.name AS prodname, products.photo as product_image ,category.name AS catname, products.id AS prodid FROM products LEFT JOIN category ON category.id=products.category_id left JOIN users on products.seller_id = users.id where products.slug <> :slug order by Rand() limit 4 ');
+		$db->bind(':slug',$slug);
+		return $db->fetchobjAll();
 	}
 	public static function fetch_user_product($category='')
 	{

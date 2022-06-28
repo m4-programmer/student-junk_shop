@@ -35,8 +35,8 @@ class Admin extends Db
 		return $db->fetch('users','','type = ?',0,'','','',true);// RETURNS AN OBJECT
 	}
 	// 3. Update Users
-	public static function update($email,$fname,$lname,$pword,$userid,$pics,$address,$phone){
-		User::update_profile($email,$fname,$lname,$pword,$userid,$pics,$address,$phone);
+	public static function update($email,$fname,$lname,$pword,$userid,$pics,$address,$phone,$whatsapp){
+		User::update_profile($email,$fname,$lname,$pword,$userid,$pics,$address,$phone,$whatsapp);
 		return true;
 	}
 	public static function updatePhoto($photo,$id){

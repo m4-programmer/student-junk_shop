@@ -17,7 +17,7 @@
 			if(!empty($filename)){
 				$ext = pathinfo($filename, PATHINFO_EXTENSION);
 				$new_filename = $slug.'.'.$ext;
-				move_uploaded_file($_FILES['photo']['tmp_name'], '../../images/'.$new_filename);	
+				move_uploaded_file($_FILES['photo']['tmp_name'], '../../images/products/'.$new_filename);	
 			}
 			else{
 				$new_filename = '';
@@ -25,6 +25,10 @@
 
 			$createProduct = Product::create(Admin::Auth()->id, $category, $name, $description, $slug, $price, $new_filename);
 			if ($createProduct == true) {
+				//get the total product belonging to a seller
+				//update the user's table with the new total product -> users->my_product in db
+				User::update_my_product(Product::Count_User_Product(Admin::Auth()->id),Admin::Auth()->id);
+
 				$_SESSION['success'] = 'Product added successfully';
 			}else{
 				$_SESSION['error'] = 'Product could not be added ';
@@ -88,10 +92,10 @@
 			$ext = pathinfo($filename, PATHINFO_EXTENSION);
 			$new_filename =$product->slug.'_'.time().'.'.$ext;
 			
-			move_uploaded_file($_FILES['photo']['tmp_name'], '../../images/'.$new_filename);	
+			move_uploaded_file($_FILES['photo']['tmp_name'], '../../images/products/'.$new_filename);	
 		
 		}else{
-			$new_filename = '../images/'.$product->photo;
+			$new_filename = '../images/products/'.$product->photo;
 		}
 		echo $new_filename;
 			Product::updatePhoto($new_filename,$id);
