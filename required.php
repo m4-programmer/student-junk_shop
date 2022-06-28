@@ -12,6 +12,7 @@ require 'const.php';
 
 $admin = new Admin;
 $user = new User;
+$buyer = new User;
 $product = new Product;
 $category = new Category;
 

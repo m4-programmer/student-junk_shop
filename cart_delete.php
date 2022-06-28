@@ -1,21 +1,19 @@
 <?php
 	include 'includes/session.php';
 
-	$conn = $pdo->open();
+	
 
 	$output = array('error'=>false);
 	$id = $_POST['id'];
 
 	if(isset($_SESSION['user'])){
-		try{
-			$stmt = $conn->prepare("DELETE FROM cart WHERE id=:id");
-			$stmt->execute(['id'=>$id]);
+		
+			$buyer->query("DELETE FROM cart WHERE id=:id");
+			$buyer->bind('id',$id);
+			$buyer->execute();
 			$output['message'] = 'Deleted';
 			
-		}
-		catch(PDOException $e){
-			$output['message'] = $e->getMessage();
-		}
+		
 	}
 	else{
 		foreach($_SESSION['cart'] as $key => $row){

@@ -13,25 +13,7 @@ class Product extends Db {
 	}
 	// This method holds the logic for total sales of a user, based on the type
 	// if user is admin he see's overall sale's if user is user he see's only his sales
-	public static function sales()
-	{
-		$db = new DB;
-		// if user is Admin
-		if (Admin::Auth()->id == 1) {
-			$db->query("SELECT * FROM details LEFT JOIN products ON products.id=details.product_id");
-			 $result = $db->fetchresult();
-		}else{
-			$db->query("SELECT * FROM details LEFT JOIN products ON products.id=details.product_id where products.seller_id =:id");
-			$db->bind(':id',Admin::Auth()->id);
-			$result = $db->fetchresult();
-		}
-		$total = 0;
-        foreach($result as $srow){
-          $subtotal = $srow['price']*$srow['quantity'];
-          $total += $subtotal;
-        }
-		return $total;
-	}
+
 	/*Fetches product that falls under a particular category*/
 	public static function fetch_product_by_category($catid)
 	{

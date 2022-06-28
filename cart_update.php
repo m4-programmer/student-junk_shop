@@ -9,14 +9,12 @@
 	$qty = $_POST['qty'];
 
 	if(isset($_SESSION['user'])){
-		try{
-			$stmt = $conn->prepare("UPDATE cart SET quantity=:quantity WHERE id=:id");
-			$stmt->execute(['quantity'=>$qty, 'id'=>$id]);
-			$output['message'] = 'Updated';
-		}
-		catch(PDOException $e){
-			$output['message'] = $e->getMessage();
-		}
+		$buyer->query("UPDATE cart SET quantity=:quantity WHERE id=:id");
+		$buyer->bind('id',$id);
+		$buyer->bind('quantity',$qty);
+		$buyer->execute();
+		$output['message'] = 'Updated';
+		
 	}
 	else{
 		foreach($_SESSION['cart'] as $key => $row){

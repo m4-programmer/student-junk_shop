@@ -1,10 +1,6 @@
 <?php
 	include 'includes/conn.php';
-	//session_start();
-
-	// if(isset($_SESSION['admin'])){
-	// 	header('location: admin/home.php');
-	// }
+	
 	include 'required.php';	
 
 	if(isset($_SESSION['user']) or isset($_SESSION['admin'])){

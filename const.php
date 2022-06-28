@@ -1,6 +1,6 @@
 <?php 
 
-const Url = 'http://localhost/skul_client_project/ecommerce/';
+const Url = 'http://localhost/skul_client_project/junkshop/';
 const Url_Admin = Url.'admin/';
 const title = 'Student Junk Shop Site using PHP';
 

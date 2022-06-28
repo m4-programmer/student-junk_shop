@@ -1,7 +1,7 @@
 <?php
 	include 'includes/session.php';
-
-	$conn = $pdo->open();
+	//$user = new User;//we initialize the User class
+	//$conn = $pdo->open();
 
 	$output = array('error'=>false);
 
@@ -9,20 +9,23 @@
 	$quantity = $_POST['quantity'];
 
 	if(isset($_SESSION['user'])){
-		$stmt = $conn->prepare("SELECT *, COUNT(*) AS numrows FROM cart WHERE user_id=:user_id AND product_id=:product_id");
-		$stmt->execute(['user_id'=>$user['id'], 'product_id'=>$id]);
-		$row = $stmt->fetch();
+		$buyer->query("SELECT *, COUNT(*) AS numrows FROM cart WHERE user_id=:user_id AND product_id=:product_id");
+		$buyer->bind(':user_id',$user['id']);
+		$buyer->bind(':product_id',$id);
+		$row = $buyer->fetchsingle();
+
+		
 		if($row['numrows'] < 1){
-			try{
-				$stmt = $conn->prepare("INSERT INTO cart (user_id, product_id, quantity) VALUES (:user_id, :product_id, :quantity)");
-				$stmt->execute(['user_id'=>$user['id'], 'product_id'=>$id, 'quantity'=>$quantity]);
+			
+				$buyer->query("INSERT INTO cart (user_id, product_id, quantity) VALUES (:user_id, :product_id, :quantity)");
+				$buyer->bind(':user_id',$user['id']);
+				$buyer->bind(':product_id',$id);
+				$buyer->bind(':quantity',$quantity);
+				$buyer->execute();
+
+			
 				$output['message'] = 'Item added to cart';
 				
-			}
-			catch(PDOException $e){
-				$output['error'] = true;
-				$output['message'] = $e->getMessage();
-			}
 		}
 		else{
 			$output['error'] = true;

@@ -18,6 +18,7 @@
       
       <?php if (Admin::Auth()->type != 1): ?>
         <li><a href="cart.php?user=<?php echo Admin::Auth()->id ?>"><i class="fa fa-money"></i> <span>My Cart</span></a></li>
+        
       <?php endif ?>
       <?php if (Admin::Auth()->type == 1): ?>
       <li class="header">MANAGE</li>
@@ -37,7 +38,7 @@
         </ul>
       </li>
       <?php else: ?>
-      <li><a href="products.php"><i class="fa fa-shopping-cart"></i>Add My Product For Sale</a></li>
+      <li><a href="products.php"><i class="fa fa-shopping-cart"></i><span>Add My Product For Sale</span></a></li>
       
       <?php endif ?>
       
