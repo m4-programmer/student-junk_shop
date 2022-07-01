@@ -70,17 +70,8 @@
 						<td><img src='".$image."' width='30px' height='30px'></td>
 						<td>".$product['name']."</td>
 						<td>&#8358; ".number_format($product['price'], 2)."</td>
-						<td class='input-group'>
-							<span class='input-group-btn'>
-            					<button type='button' id='minus' class='btn btn-default btn-flat minus' data-id='".$row['productid']."'><i class='fa fa-minus'></i></button>
-            				</span>
-            				<input type='text' class='form-control' value='".$row['quantity']."' id='qty_".$row['productid']."'>
-				            <span class='input-group-btn'>
-				                <button type='button' id='add' class='btn btn-default btn-flat add' data-id='".$row['productid']."'><i class='fa fa-plus'></i>
-				                </button>
-				            </span>
-						</td>
-						<td>&#8358; ".number_format($subtotal, 2)."</td>
+						<td><a href=product.php?product=".$product['slug']." class='btn btn-success'>Buy product</a></td>
+						
 					</tr>
 				";
 				
@@ -88,7 +79,7 @@
 
 			$output .= "
 				<tr>
-					<td colspan='5' align='right'><b>Total</b></td>
+					<td colspan='3' align='right'><b>Total</b></td>
 					<td><b>&#8358; ".number_format($total, 2)."</b></td>
 				<tr>
 			";

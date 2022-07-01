@@ -22,7 +22,7 @@
 		        				<th>Name</th>
 		        				<th>Price</th>
 		        				<!-- <th width="20%">Quantity</th> -->
-		        				<th>Subtotal</th>
+		        				<th>Action</th>
 		        			</thead>
 		        			<tbody id="tbody">
 		        			</tbody>
